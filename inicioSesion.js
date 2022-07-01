@@ -3,7 +3,7 @@ import { Text,View, Button} from "react-native";
 import { firebaseApp } from "./firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-export default function InicioSesion(){
+export default function InicioSesion({navigation}){
     const [email, setEmail] = useState("");
     const [password, setpassword] =useState("");
 
@@ -15,6 +15,7 @@ export default function InicioSesion(){
             // Signed in
             const user = userCredential.user;
             console.log("Credenciales = " + userCredential)
+            navigation .navigate("Subir")
           })
           .catch((error) => {
             const errorCode = error.code;

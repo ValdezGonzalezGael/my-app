@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Text,View, Button} from "react-native";
 import { firebaseApp } from "./firebase";
 
-export default function RegistrarUsuario(){
+export default function RegistrarUsuario({ navigation }){
 
     const [usuario, setusuario] = useState("");
     const [password, setpassword] =useState("");
@@ -13,6 +13,7 @@ export default function RegistrarUsuario(){
             .then((userCredential) => {
                 console.log(userCredential)
                 const user = userCredential.user;
+                navigation .navigate("Subir")
             })
             .catch((error) => {
                 console.log(error)
