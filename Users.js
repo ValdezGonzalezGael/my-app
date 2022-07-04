@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { ListItem, Avatar, Icon } from "@rneui/themed";
-import { firebaseApp } from "./firebase";
+import { firebase } from "./firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Users({ navigation: { navigate } }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const auth = getAuth();
-  function login (){
-    onAuthStateChanged (auth, user=> {
-      (user !=null) ? console.log('Autentificado') : console.log ("no hay nadien Autentificado")
+  function login() {
+    onAuthStateChanged(auth, (user) => {
+      user != null
+        ? console.log("Autentificado")
+        : console.log("no hay nadien Autentificado");
     });
   }
-  
+
   const getMovies = async () => {
     try {
       const response = await fetch(
@@ -35,10 +37,25 @@ export default function Users({ navigation: { navigate } }) {
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? <ActivityIndicator /> : (
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
         data.map((l, i) => (
-          <ListItem key={i} bottomDivider  onPress={() => navigate('User', { usuario: l })}>
-            {l.avatar_url ? <Avatar source={{ uri: l.avatar_url }} /> : <Icon reverse name='ios-american-football' type='ionicon' color='#517fa4' />}
+          <ListItem
+            key={i}
+            bottomDivider
+            onPress={() => navigate("User", { usuario: l })}
+          >
+            {l.avatar_url ? (
+              <Avatar source={{ uri: l.avatar_url }} />
+            ) : (
+              <Icon
+                reverse
+                name="ios-american-football"
+                type="ionicon"
+                color="#517fa4"
+              />
+            )}
             <ListItem.Content>
               <ListItem.Title>{l.name}</ListItem.Title>
               <ListItem.Subtitle>{l.email}</ListItem.Subtitle>
