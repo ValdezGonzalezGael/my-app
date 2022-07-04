@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDPIOSrf3N6HTOAqejYE5DeoRfWbMeNQCw",
-  authDomain: "fir-app-bbef4.firebase.com",
-  projectId: "fir-app-bbef4",
-  storageBucket: "fir-app-bbef4.appspot.com",
-  messagingSenderId: "504966428382",
-  appId: "1:504966428382:web:e086b6d7bb2d130a83f44f",
-  measurementId: "G-W3BLJMFYBE",
+  apiKey: "AIzaSyDT3y0RmKHMb28DkTSBKIhc5CmMMkUolgI",
+  authDomain: "ejemplomovil-8955f.firebaseapp.com",
+  projectId: "ejemplomovil-8955f",
+  storageBucket: "ejemplomovil-8955f.appspot.com",
+  messagingSenderId: "379626789643",
+  appId: "1:379626789643:web:247905860a836b02c5600e",
+  measurementId: "G-PJPG8BQR17"
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);

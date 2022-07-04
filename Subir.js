@@ -26,7 +26,7 @@ import { getAdditionalUserInfo, getAuth, signOut } from "firebase/auth";
 
 export default function Subir({ navigation }, props) {
   const [nameImage, setNameImage] = useState(
-    Math.floor(Math.random() * (9999999999999 - 1 + 1) + 1)
+    Math.floor(Math.random() * (999999999999999999 - 1 + 1) + 1)
   );
   const [list, setList] = useState([]);
 
@@ -34,14 +34,12 @@ export default function Subir({ navigation }, props) {
     user: { id: "", email: "", urlImage: "" },
   };
 
-  console.log(props);
   /* const usuario = props.user.email;
   console.log(usuario); */
 
   const auth = getAuth();
   console.log(props);
 
-  console.log(auth);
   const signOutMain = () => {
     signOut(auth)
       .then(() => {
@@ -59,7 +57,7 @@ export default function Subir({ navigation }, props) {
     console.log(blob);
 
     const storage = getStorage();
-    const storageRef = ref(storage, `imagenes/img${nameImage}`);
+    const storageRef = ref(storage, `imagenes/${nameImage}`);
     uploadString(storageRef, blob.url, "data_url").then((snapshot) => {
       setNameImage(nameImage);
       console.log(nameImage);
@@ -99,12 +97,11 @@ export default function Subir({ navigation }, props) {
           console.log(itemRef);
           getDownloadURL(itemRef).then((downloadURL) => {
             // list.push(downloadURL);
-            // setList(downloadURL);
-            console.log("result = " + downloadURL);
-            /*
-            const imageUploaded = listRef.getDownloadURL;
-            console.log("result" + imageUploaded);
-            setList(itemRef); */
+            const URL_DATA = downloadURL;
+            const dt = [URL_DATA];
+            dt.push()
+            setList(dt);
+            console.log(dt)
           });
         })
         .catch((error) => {
@@ -137,6 +134,11 @@ export default function Subir({ navigation }, props) {
       <View>
         <Button title="Ver imagenes" onPress={VerImagenes}></Button>
       </View>
+      <Image
+          style={{ width: "100%", height: 100 }}
+          resizeMode="contain"
+          source={{ uri: list }}   
+        />
       <ScrollView>
         <FlatList
           keyExtractor={keyExtractor}

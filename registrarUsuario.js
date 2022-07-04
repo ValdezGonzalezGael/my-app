@@ -12,7 +12,7 @@ export default function RegistrarUsuario({ navigation }) {
       .then((userCredential) => {
         console.log(userCredential);
         const user = userCredential.user;
-        navigation.navigate("Subir");
+        navigation.navigate("Subir", {...params.route.userCredential.user});
       })
       .catch((error) => {
         console.log(error);
