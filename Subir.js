@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import {
   View,
   Button,
-  SnapshotViewIOSBase,
   FlatList,
   Image,
   ScrollView,
   Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import { firebase } from "./firebase";
 import {
@@ -18,30 +20,23 @@ import {
 } from "firebase/storage";
 import { camera } from "expo-Permissions";
 
-import { ListItem, Icon, Avatar, Card } from "@rneui/themed";
+import { ListItem, Icon, Avatar, Card, Input } from "@rneui/themed";
 
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { getAdditionalUserInfo, getAuth, signOut } from "firebase/auth";
+import TitledHeader from "./components/TitledHeader";
 
 export default function Subir({ navigation }, props) {
   const [nameImage, setNameImage] = useState(
-    Math.floor(Math.random() * (9999999999999 - 1 + 1) + 1)
+    Math.floor(Math.random() * (9999999999999999 - 1 + 1) + 1)
   );
   const [list, setList] = useState([]);
 
-  const datos = {
-    user: { id: "", email: "", urlImage: "" },
-  };
-
-  console.log(props);
-  /* const usuario = props.user.email;
-  console.log(usuario); */
+  const datos = { id: "", email: "", urlImage: "" };
 
   const auth = getAuth();
-  console.log(props);
 
-  console.log(auth);
   const signOutMain = () => {
     signOut(auth)
       .then(() => {
@@ -86,30 +81,23 @@ export default function Subir({ navigation }, props) {
     }
   };
 
-  const VerImagenes = () => {
+  const VerImagenes = async () => {
     const storage = getStorage();
-    const listRef = ref(storage, "imagenes/");
+    const listRef = await ref(storage, "imagenes/");
 
     listAll(listRef).then((res) => {
-      res.prefixes.forEach((folderRef) => {
-        console.log("folder" + folderRef);
-      });
-      res.items
-        .forEach((itemRef) => {
-          console.log(itemRef);
-          getDownloadURL(itemRef).then((downloadURL) => {
-            // list.push(downloadURL);
-            // setList(downloadURL);
-            console.log("result = " + downloadURL);
-            /*
-            const imageUploaded = listRef.getDownloadURL;
-            console.log("result" + imageUploaded);
-            setList(itemRef); */
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+      res.items.forEach((itemRef) => {
+        getDownloadURL(itemRef).then((downloadURL) => {
+          const fetched = downloadURL;
+          list.push(fetched);
+          const obj = { ...list };
+          setList(obj);
+          console.log(obj);
         });
+      });
+      /* .catch((error) => {
+          console.log(error);
+        }); */
     });
   };
   const keyExtractor = (item, index) => index.toString();
@@ -128,15 +116,36 @@ export default function Subir({ navigation }, props) {
   );
   return (
     <>
-      <View>
-        <Button title="Subir imagen" onPress={seleccionarImagen}></Button>
-      </View>
-      <View>
-        <Button title="Cerrar sesión" onPress={signOutMain}></Button>
-      </View>
-      <View>
-        <Button title="Ver imagenes" onPress={VerImagenes}></Button>
-      </View>
+      <TitledHeader title="Subir" />
+      <SafeAreaView style={{ flex: 1, alignItems: "center" }}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[style.button]}
+          onPress={seleccionarImagen}
+        >
+          <View>
+            <Text style={[style.text]}>Subir imagen</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[style.button]}
+          onPress={signOutMain}
+        >
+          <View>
+            <Text style={[style.text]}>Cerrar sesión</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[style.button]}
+          onPress={VerImagenes}
+        >
+          <View>
+            <Text style={[style.text]}>Ver imagenes</Text>
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
       <ScrollView>
         <FlatList
           keyExtractor={keyExtractor}
@@ -147,3 +156,18 @@ export default function Subir({ navigation }, props) {
     </>
   );
 }
+
+const style = StyleSheet.create({
+  button: {
+    backgroundColor: "#0BBBEF",
+    width: "80%",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  text: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 17,
+  },
+});

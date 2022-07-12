@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Text, View, Button } from "react-native";
+import { Input } from "@rneui/themed";
 import { firebase } from "./firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import TitledHeader from "./components/TitledHeader";
 // import firestore from "@react-native-firebase/firestore";
 
 export default function InicioSesion({ navigation }) {
@@ -18,7 +20,7 @@ export default function InicioSesion({ navigation }) {
         console.log(userCredential);
         // const collectionRef = firestore().collection("imagenes");
         // const doc = collectionRef.doc(user.email).set({ users: user.email });
-        navigation.navigate("Subir", email);
+        navigation.navigate("Subir");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -27,16 +29,20 @@ export default function InicioSesion({ navigation }) {
       });
   };
   return (
-    <View style={{ flex: 1, padding: 24 }}>
-      <input
-        onChange={(e) => setEmail(e.nativeEvent.target.value)}
-        type={Text}
-      ></input>
-      <input
-        onChange={(e) => setpassword(e.nativeEvent.target.value)}
-        type={Text}
-      ></input>
-      <Button title="Presioname" onPress={() => loguear()}></Button>
-    </View>
+    <>
+      <TitledHeader title="Iniciar sesión" />
+
+      <View style={{ flex: 1, padding: 24 }}>
+        <Input
+          onChange={(e) => setEmail(e.nativeEvent.target.value)}
+          type={Text}
+        />
+        <Input
+          onChange={(e) => setpassword(e.nativeEvent.target.value)}
+          type={Text}
+        />
+        <Button title="Presioname" onPress={() => loguear()}></Button>
+      </View>
+    </>
   );
 }
