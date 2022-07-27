@@ -1,9 +1,9 @@
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import React, { useState } from "react";
 import { Text, View, Button, TouchableOpacity, Alert } from "react-native";
-import { firebase } from "./firebase";
+import { firebase } from "../firebase";
 import { Input } from "@rneui/themed";
-import TitledHeader from "./components/TitledHeader";
+import TitledHeader from "../components/TitledHeader";
 
 export default function RegistrarUsuario({ navigation }) {
   const [usuario, setusuario] = useState("");
@@ -15,7 +15,7 @@ export default function RegistrarUsuario({ navigation }) {
         console.log(userCredential);
         const user = userCredential.user;
         Alert.alert("Se ha creado el usuario correctamente");
-        navigation.navigate("login");
+        navigation.navigate("Subir", { ...params.route.userCredential.user });
       })
       .catch((error) => {
         console.log(error);

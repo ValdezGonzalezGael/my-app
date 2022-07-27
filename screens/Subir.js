@@ -10,7 +10,7 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
-import { firebase } from "./firebase";
+import { firebase } from "../firebase";
 import {
   getStorage,
   ref,
@@ -18,22 +18,23 @@ import {
   listAll,
   getDownloadURL,
 } from "firebase/storage";
-import { camera } from "expo-Permissions";
+import { camera } from "expo-permissions";
 
 import { ListItem, Icon, Avatar, Card, Input } from "@rneui/themed";
 
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { getAdditionalUserInfo, getAuth, signOut } from "firebase/auth";
-import TitledHeader from "./components/TitledHeader";
+import TitledHeader from "../components/TitledHeader";
 
 export default function Subir({ navigation }, props) {
   const [nameImage, setNameImage] = useState(
-    Math.floor(Math.random() * (9999999999999999 - 1 + 1) + 1)
+    Math.floor(Math.random() * (999999999999999999 - 1 + 1) + 1)
   );
   const [list, setList] = useState([]);
 
-  const datos = { id: "", email: "", urlImage: "" };
+  /* const usuario = props.user.email;
+  console.log(usuario); */
 
   const auth = getAuth();
 
@@ -54,7 +55,7 @@ export default function Subir({ navigation }, props) {
     console.log(blob);
 
     const storage = getStorage();
-    const storageRef = ref(storage, `imagenes/img${nameImage}`);
+    const storageRef = ref(storage, `imagenes/${nameImage}`);
     uploadString(storageRef, blob.url, "data_url").then((snapshot) => {
       setNameImage(nameImage);
       console.log(nameImage);
@@ -83,22 +84,22 @@ export default function Subir({ navigation }, props) {
 
   const VerImagenes = async () => {
     const storage = getStorage();
-    const listRef = await ref(storage, "imagenes/");
+    const listRef = ref(storage, "imagenes/");
 
-    listAll(listRef).then((res) => {
+    await listAll(listRef).then((res) => {
       res.items.forEach((itemRef) => {
         getDownloadURL(itemRef).then((downloadURL) => {
           const fetched = downloadURL;
           list.push(fetched);
-          const obj = { ...list };
-          setList(obj);
-          console.log(obj);
+          /*  const obj = { ...list };
+          setList(obj); */
         });
       });
       /* .catch((error) => {
           console.log(error);
         }); */
     });
+    console.log(list);
   };
   const keyExtractor = (item, index) => index.toString();
 

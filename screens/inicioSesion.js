@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Text, View, Button } from "react-native";
 import { Input } from "@rneui/themed";
-import { firebase } from "./firebase";
+import { firebase } from "../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import TitledHeader from "./components/TitledHeader";
+import TitledHeader from "../components/TitledHeader";
 // import firestore from "@react-native-firebase/firestore";
 
 export default function InicioSesion({ navigation }) {

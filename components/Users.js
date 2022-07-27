@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { ListItem, Avatar, Icon } from "@rneui/themed";
-import { firebase } from "./firebase";
+import { firebase } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Users({ navigation: { navigate } }) {

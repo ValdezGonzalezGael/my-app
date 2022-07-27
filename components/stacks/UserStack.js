@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import Users from "./Users";
-import User from "./User";
-import Subir from "./Subir";
-import RegistrarUario from "./registrarUsuario";
+import Users from "../Users";
+import User from "../User";
+import Subir from "../../screens/Subir";
+import RegistrarUario from "../../screens/registrarUsuario";
 
 const Stack = createStackNavigator();
 
