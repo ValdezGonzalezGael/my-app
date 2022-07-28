@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { Input } from "@rneui/themed";
 import { firebase } from "../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -48,7 +48,14 @@ export default function InicioSesion({ navigation: { navigate } }) {
     <>
       <TitledHeader title="Iniciar sesión" />
 
-      <View style={{ flex: 1, padding: 24 }}>
+      <View
+        style={{
+          flex: 1,
+          padding: 24,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Input
           onChange={(e) => setEmail(e.nativeEvent.target.value)}
           type={Text}
@@ -57,9 +64,32 @@ export default function InicioSesion({ navigation: { navigate } }) {
           onChange={(e) => setpassword(e.nativeEvent.target.value)}
           type={Text}
         />
-        <Button title="Presioname" onPress={loguear}></Button>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[style.button]}
+          onPress={loguear}
+        >
+          <View>
+            <Text style={[style.text]}>Iniciar sesión</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       {viewComponent ? <Subir info={email} /> : null}
     </>
   );
 }
+
+const style = StyleSheet.create({
+  button: {
+    backgroundColor: "#0BBBEF",
+    width: "80%",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  text: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 17,
+  },
+});

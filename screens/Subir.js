@@ -53,7 +53,7 @@ export default function Subir({ navigation, route }, props) {
     signOut(auth)
       .then(() => {
         console.log("Sesion finalizada");
-        navigation.navigate("login");
+        navigation.navigate("InicioSesion");
       })
       .catch((error) => {
         console.log("Error = " + error);
@@ -126,16 +126,13 @@ export default function Subir({ navigation, route }, props) {
   const keyExtractor = (item, index) => index.toString();
 
   const renderItem = ({ item }) => (
-    <Card>
-      <View style={{ position: "relative", alignItems: "center" }}>
-        <Image
-          style={{ width: "100%", height: 100 }}
-          resizeMode="contain"
-          source={{ uri: item.stringValue }}
-        />
-        <Text>Text</Text>
-      </View>
-    </Card>
+    <View style={{ position: "relative", alignItems: "center" }}>
+      <Image
+        style={{ width: "100%", height: 100 }}
+        resizeMode="contain"
+        source={{ uri: item.stringValue }}
+      />
+    </View>
   );
   return (
     <>
