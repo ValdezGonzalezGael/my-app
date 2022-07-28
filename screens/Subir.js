@@ -27,14 +27,25 @@ import * as ImagePicker from "expo-image-picker";
 import { getAdditionalUserInfo, getAuth, signOut } from "firebase/auth";
 import TitledHeader from "../components/TitledHeader";
 
-export default function Subir({ navigation }, props) {
+import { collection, addDoc, getFirestore, getDocs } from "firebase/firestore";
+
+export default function Subir({ navigation, route }, props) {
   const [nameImage, setNameImage] = useState(
     Math.floor(Math.random() * (999999999999999999 - 1 + 1) + 1)
   );
   const [list, setList] = useState([]);
+  const [urls, setUrls] = useState({
+    images: [],
+  });
+  const { images } = urls;
 
-  /* const usuario = props.user.email;
-  console.log(usuario); */
+  const { info } = props;
+  console.log(info);
+  /* const { email_user } = route.params;
+
+  console.log(email_user);
+  const user_email = props.email;
+  console.log(user_email); */
 
   const auth = getAuth();
 
@@ -53,8 +64,10 @@ export default function Subir({ navigation }, props) {
     const response = await fetch(uri);
     const blob = await response;
     console.log(blob);
-
     const storage = getStorage();
+    const listRef = ref(storage, "imagenes/");
+    const db = getFirestore();
+
     const storageRef = ref(storage, `imagenes/${nameImage}`);
     uploadString(storageRef, blob.url, "data_url").then((snapshot) => {
       setNameImage(nameImage);
@@ -62,6 +75,17 @@ export default function Subir({ navigation }, props) {
       console.log(snapshot);
       console.log(storageRef);
       console.log("La imagen se subio correctamente");
+
+      listAll(listRef).then((res) => {
+        res.items.forEach((itemRef) => {
+          getDownloadURL(itemRef).then((downloadURL) => {
+            const docRef = addDoc(collection(db, "img"), {
+              user: "user_",
+              url_image: downloadURL,
+            });
+          });
+        });
+      });
     });
   };
 
@@ -85,19 +109,17 @@ export default function Subir({ navigation }, props) {
   const VerImagenes = async () => {
     const storage = getStorage();
     const listRef = ref(storage, "imagenes/");
+    const db = getFirestore();
 
-    await listAll(listRef).then((res) => {
-      res.items.forEach((itemRef) => {
-        getDownloadURL(itemRef).then((downloadURL) => {
-          const fetched = downloadURL;
-          list.push(fetched);
-          /*  const obj = { ...list };
-          setList(obj); */
-        });
+    const querySnapshot = await getDocs(collection(db, "img"));
+    querySnapshot.forEach((doc) => {
+      list.push(doc._document.data.value.mapValue.fields.url_image);
+      console.log(`${doc.id} => ${doc.data()}`);
+      console.log(list);
+      setUrls({
+        ...urls,
+        images,
       });
-      /* .catch((error) => {
-          console.log(error);
-        }); */
     });
     console.log(list);
   };
@@ -109,7 +131,7 @@ export default function Subir({ navigation }, props) {
         <Image
           style={{ width: "100%", height: 100 }}
           resizeMode="contain"
-          source={{ uri: item }}
+          source={{ uri: item.stringValue }}
         />
         <Text>Text</Text>
       </View>
@@ -147,7 +169,7 @@ export default function Subir({ navigation }, props) {
           </View>
         </TouchableOpacity>
       </SafeAreaView>
-      <ScrollView>
+      <ScrollView style={{ flex: 1 }}>
         <FlatList
           keyExtractor={keyExtractor}
           data={list}

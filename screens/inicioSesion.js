@@ -5,22 +5,38 @@ import { firebase } from "../firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import TitledHeader from "../components/TitledHeader";
 // import firestore from "@react-native-firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import Subir from "./Subir";
 
-export default function InicioSesion({ navigation }) {
+export default function InicioSesion({ navigation: { navigate } }) {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
+  const [viewComponent, setViewComponent] = useState(false);
 
   const auth = getAuth();
 
   const loguear = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+        /* const db = getFirestore();
+        const querySnapshot = await getDocs(collection(db, "img"));
+        querySnapshot.forEach((doc) => {
+          console.log(`${doc.id} => ${doc.data()}`);
+          setDoc(doc(db, "img", `${doc.id}`), {
+            user: user.email,
+          });
+        }); */
         console.log(userCredential);
-        // const collectionRef = firestore().collection("imagenes");
-        // const doc = collectionRef.doc(user.email).set({ users: user.email });
-        navigation.navigate("Subir");
+        navigate("Subir");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -41,8 +57,9 @@ export default function InicioSesion({ navigation }) {
           onChange={(e) => setpassword(e.nativeEvent.target.value)}
           type={Text}
         />
-        <Button title="Presioname" onPress={() => loguear()}></Button>
+        <Button title="Presioname" onPress={loguear}></Button>
       </View>
+      {viewComponent ? <Subir info={email} /> : null}
     </>
   );
 }
